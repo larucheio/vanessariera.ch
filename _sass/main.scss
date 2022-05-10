@@ -60,14 +60,15 @@ body {
 
 .work-detail {
   margin-top: 5rem;
-  position: sticky;
-  top: 5rem;
-  z-index: -1;
 }
 
 .work-detail h1 {
   @include font-size(10rem);
   line-height: 1;
+
+  z-index: -1;
+  position: sticky;
+  top: 5rem;
 }
 
 .work-detail__image {
@@ -75,4 +76,6 @@ body {
   max-height: 80vh;
   box-sizing: border-box;
   display: block;
+
+  margin-bottom: 2rem;
 }
