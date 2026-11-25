@@ -15,5 +15,57 @@
       <a href="/contact/">Contact</a>
     </nav>
     {{ content }}
+    <script>
+      // Les titres de projets gardent leur taille normale, sauf s'ils sont
+      // plus larges que l'écran : ils sont alors réduits pour tenir sur une ligne.
+      (function () {
+        var titles = document.querySelectorAll(".work__title, .work-detail h1");
+        if (!titles.length) return;
+
+        // Taille qui ferait tenir le titre dans sa largeur, ou null s'il tient déjà.
+        function fittingSize(title) {
+          var range = document.createRange();
+          range.selectNodeContents(title);
+          var available = title.getBoundingClientRect().width;
+          var needed = range.getBoundingClientRect().width;
+          if (!available || needed <= available) return null;
+          var size = parseFloat(getComputedStyle(title).fontSize);
+          return Math.floor((size * available) / needed * 10) / 10;
+        }
+
+        function fit() {
+          titles.forEach(function (title) {
+            title.style.whiteSpace = "nowrap";
+            title.style.fontSize = "";
+          });
+
+          // La largeur du texte n'est pas exactement proportionnelle à la taille
+          // (arrondis du navigateur), d'où quelques passes de correction.
+          for (var pass = 0; pass < 4; pass++) {
+            var sizes = Array.prototype.map.call(titles, fittingSize);
+            var changed = false;
+            titles.forEach(function (title, i) {
+              if (sizes[i] === null) return;
+              title.style.fontSize = sizes[i] + "px";
+              changed = true;
+            });
+            if (!changed) break;
+          }
+        }
+
+        var pending = false;
+        window.addEventListener("resize", function () {
+          if (pending) return;
+          pending = true;
+          requestAnimationFrame(function () {
+            pending = false;
+            fit();
+          });
+        });
+
+        fit();
+        if (document.fonts) document.fonts.ready.then(fit);
+      })();
+    </script>
   </body>
 </html>
