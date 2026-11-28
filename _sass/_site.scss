@@ -82,6 +82,17 @@ p {
   margin-bottom: 2rem;
 }
 
+.work-detail__video {
+  display: block;
+  width: 100%;
+  max-width: 1920px;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border: 0;
+
+  margin-bottom: 2rem;
+}
+
 .credits {
   font-size: 1rem;
 }
