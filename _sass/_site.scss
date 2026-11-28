@@ -2,8 +2,31 @@ $backgroundColor: #ffffff;
 $bodyColor: #000000;
 $bodyFont: "ES Allianz", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 
-body {
+// Tous les titres de projets ont la même taille : celle qui fait tenir le plus
+// large, « DE(S)POSSESSION(S) », sur toute la largeur de la page (marges du body
+// déduites), sans dépasser 10rem.
+// Ce titre mesure 10,02 fois sa taille de police en ES Allianz Medium (10.1 laisse
+// une petite marge). Si un titre plus large est ajouté, augmenter cette valeur.
+$widestTitleInEm: 10.1;
+
+@mixin work-title-size {
+  // unquote() laisse min() et calc() au navigateur au lieu de Sass.
+  // Repli pour les navigateurs sans unités de conteneur : largeur de la fenêtre.
+  font-size: unquote("min(10rem, calc((100vw - 2rem) / #{$widestTitleInEm}))");
+  // 100cqi = largeur de <html>, barre de défilement non comprise.
+  font-size: unquote("min(10rem, calc((100cqi - 2rem) / #{$widestTitleInEm}))");
+  line-height: 1;
+}
+
+html {
+  // Référence des unités cqi des titres.
+  container-type: inline-size;
+  // Le fond est porté par <html> et non par body : avec container-type, le fond
+  // du body ne serait plus étendu à la page et masquerait les titres en z-index -1.
   background: $backgroundColor;
+}
+
+body {
   color: $bodyColor;
   font-family: $bodyFont;
   font-size: 20px;
@@ -48,8 +71,7 @@ p {
 }
 
 .work__title {
-  @include font-size(10rem);
-  line-height: 1;
+  @include work-title-size;
   color: $bodyColor;
   margin-bottom: 2rem;
 }
@@ -65,8 +87,7 @@ p {
 }
 
 .work-detail h1 {
-  @include font-size(10rem);
-  line-height: 1;
+  @include work-title-size;
 
   z-index: -1;
   position: sticky;
